@@ -1,28 +1,82 @@
-# Kleurplatenmaken.ai
+# Kleurplatenmaken.ai 🎨
 
-Een platform voor het maken van kleurplaten met behulp van AI.
+Een webapplicatie waarmee gebruikers een foto kunnen uploaden en een kleurplaatversie kunnen genereren op basis van drie moeilijkheidsgraden.
 
-## Beschrijving
+## Features
 
-Kleurplatenmaken.ai is een webapplicatie die gebruikers in staat stelt om kleurplaten te maken met behulp van kunstmatige intelligentie. Gebruikers kunnen hun eigen ontwerpen maken en deze downloaden als kleurplaten.
+- 📸 Foto uploaden
+- 🎨 Drie moeilijkheidsgraden voor kleurplaten
+- 🤖 AI-gestuurde conversie
+- 📱 Responsive design
+- 💾 Directe download van kleurplaten
 
-## Installatie
+## Tech Stack
 
+- Frontend: Next.js 14 (React)
+- Backend: Python FastAPI
+- AI: OpenAI API
+- Styling: Tailwind CSS
+- Database: PostgreSQL
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.9+
+- PostgreSQL
+- OpenAI API key
+
+### Installation
+
+1. Clone the repository:
 ```bash
-# Clone de repository
-git clone https://github.com/6ftwardje/kleurplatenmaken.ai.git
-
-# Navigeer naar de project directory
+git clone https://github.com/yourusername/kleurplatenmaken.ai.git
 cd kleurplatenmaken.ai
+```
 
-# Installeer dependencies
+2. Install frontend dependencies:
+```bash
+cd frontend
 npm install
 ```
 
-## Gebruik
+3. Install backend dependencies:
+```bash
+cd ../backend
+python -m venv venv
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-[Gebruiksinstructies volgen]
+4. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
 
-## Licentie
+5. Start the development servers:
 
-Dit project is gelicenseerd onder de MIT License - zie het [LICENSE](LICENSE) bestand voor details. 
+Frontend:
+```bash
+cd frontend
+npm run dev
+```
+
+Backend:
+```bash
+cd backend
+uvicorn main:app --reload
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 
