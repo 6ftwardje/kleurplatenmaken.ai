@@ -78,14 +78,14 @@ def generate_coloring_page(image: Image.Image, difficulty: str) -> Image.Image:
         logger.info("Sending image to GPT-4 Vision for analysis")
         try:
             vision_response = client.chat.completions.create(
-                model="gpt-4-vision-preview-v2",  # Updated model name
+                model="gpt-4-vision-preview-v2",
                 messages=[
                     {
                         "role": "user",
                         "content": [
                             {
                                 "type": "text",
-                                "text": f"Analyze this image and describe it in detail. Focus on the main elements, shapes, and lines that would make a good coloring page. Consider the difficulty level: {difficulty}. For easy, keep it simple with basic shapes. For medium, add more details. For hard, include intricate patterns and details."
+                                "text": f"""Gebruik de meegeleverde afbeelding als basis en genereer hiervan een zwart-wit kleurplaat. De stijl moet passen bij het gekozen detailniveau:\n\n- Makkelijk: dikke lijnen, grote vormen, weinig detail, geschikt voor kleuters.\n- Gevorderd: iets meer detail, fijnere lijnen, maar nog steeds goed inkleurbaar voor kinderen.\n- Moeilijk: complexe lijnen en patronen, geschikt voor volwassenen, hoge detaillering.\n\nOutput als een zwart-wit illustratie die makkelijk geprint en ingekleurd kan worden. Geen kleuren, alleen duidelijke zwarte lijnen. Gebruik de afbeelding visueel als referentie.\n\nMoeilijkheidsgraad: {difficulty}"""
                             },
                             {
                                 "type": "image_url",
@@ -96,7 +96,7 @@ def generate_coloring_page(image: Image.Image, difficulty: str) -> Image.Image:
                         ]
                     }
                 ],
-                max_tokens=500
+                max_tokens=1000
             )
             
             # Get the image description
@@ -107,14 +107,30 @@ def generate_coloring_page(image: Image.Image, difficulty: str) -> Image.Image:
         except Exception as e:
             logger.error(f"Error in GPT-4 Vision API call: {str(e)}")
             # Fallback to DALL-E directly if Vision API fails
-            image_description = f"Create a {difficulty} difficulty coloring page based on the uploaded image. For {difficulty} difficulty, {'keep it simple with basic shapes' if difficulty == 'easy' else 'add moderate detail and patterns' if difficulty == 'medium' else 'include intricate patterns and detailed elements'}."
+            image_description = f"""Create a {difficulty} difficulty coloring page based on the uploaded image. 
+            For {difficulty} difficulty:
+            {'Keep it simple with basic shapes and minimal details' if difficulty == 'easy' 
+            else 'Include moderate detail and patterns' if difficulty == 'medium' 
+            else 'Include intricate patterns and detailed elements'}."""
             logger.info("Using fallback description for DALL-E")
         
         # Generate the coloring page using DALL-E
         logger.info("Sending request to DALL-E for image generation")
         dalle_response = client.images.generate(
             model="dall-e-3",
-            prompt=f"Create a detailed coloring page based on this description: {image_description}. Make it a black and white line drawing suitable for coloring. The lines should be clear and distinct. For {difficulty} difficulty level, adjust the complexity accordingly. Use only black lines on white background, no shading or grayscale.",
+            prompt=f"""Create a detailed coloring page based on this description: {image_description}
+            
+            Requirements:
+            1. Make it a black and white line drawing suitable for coloring
+            2. Use only black lines on white background, no shading or grayscale
+            3. Lines should be clear, distinct, and well-defined
+            4. Maintain the key features and recognizable elements from the original image
+            5. Adjust complexity based on {difficulty} difficulty level
+            6. Ensure the drawing is suitable for coloring with crayons or markers
+            7. Keep the composition and proportions similar to the original image
+            
+            Style: Clean, professional line art suitable for a coloring book.
+            The final result should be recognizable as a coloring page version of the original image.""",
             n=1,
             size="1024x1024",
             quality="standard",
